@@ -6,6 +6,19 @@ import AuthProvider from "./services/providers/AuthProvider/AuthProvider";
 import { Provider } from "react-redux";
 import { store } from "./services/state/store";
 import PrivateRoute from "./services/providers/PrivateRoute";
+import RegisterPage from "./pages/RegisterPage";
+import NotFoundPage from "./pages/NotFoundPage";
+
+function Logout() {
+  localStorage.clear();
+  return <LoginPage />
+}
+
+
+function RegisterAndLogout() {
+  localStorage.clear();
+  return <RegisterPage />
+}
 
 function App() {
   return (
@@ -15,9 +28,12 @@ function App() {
           <AuthProvider>
             <Routes>
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/logout" element={<Logout />} />
+              <Route path="/register" element={<RegisterAndLogout />} />
               <Route element={<PrivateRoute />}>
                 <Route path="/" element={<MainPage />} />
               </Route>
+              <Route path="*" element={<NotFoundPage />}/>
             </Routes>
           </AuthProvider>
         </Provider>

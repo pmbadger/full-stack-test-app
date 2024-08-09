@@ -1,17 +1,20 @@
 import React, { useCallback, useState } from "react";
+import { selectProduct } from "../../../../services/api/product";
 
 const ProductTableRow = ({ item }) => {
+    console.log("item");
+    
     const [isProductCheck, setIsProductCheck] = useState(item?.checked || false);
 
     const handleProductCheck = useCallback(e => {
         setIsProductCheck(e.target.checked);
-        // selectProduct({
-        //     id: item.id,
-        //     selected: e.target.checked,
-        // }).then(() => {
-        //     setIsProductCheck(e.target.checked);
-        // });
-    }, []);
+        selectProduct({
+            product_id: item.id,
+            select: e.target.checked,
+        }).then(() => {
+            setIsProductCheck(e.target.checked);
+        });
+    }, [item.id]);
 
     return (
         <div className="card border-primary mb-3 px-2 pt-2 pb-3">

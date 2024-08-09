@@ -1,55 +1,95 @@
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clearProfile, setProfile } from "../../state/profile/profileSlice";
-// import { authLogin } from "../../api/auth";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../../utils/consts";
+import { jwtDecode } from "jwt-decode";
+import { authLogin, postRegister, tokenRefresh } from "../../api/auth";
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [token, setToken] = useState(localStorage.getItem("site") || "");
+    const [isAuthorized, setIsAuthorized] = useState(null);
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
+
+    const refreshToken = async () => {
+        const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+        try {
+            const res = tokenRefresh({ refresh: refreshToken });
+            if (res.status === 200) {
+                localStorage.setItem(ACCESS_TOKEN, res.data.access);
+                setIsAuthorized(true);
+            } else {
+                setIsAuthorized(false);
+            }
+
+        } catch (error) {
+            console.log(error);
+            setIsAuthorized(false);
+        }
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const auth = async () => {
+        const token = localStorage.getItem(ACCESS_TOKEN);
+        if (!token) {
+            setIsAuthorized(false);
+            return;
+        }
+
+        const decoded = jwtDecode(token);
+        const tokenExpiration = decoded.exp;
+        const now = Date.now() / 1000;
+
+        if (tokenExpiration < now) {
+            await refreshToken();
+        } else {
+            setIsAuthorized(true);
+        }
+    };
+
     const loginAction = async ({ data }) => {
-        dispatch(setProfile(data));
-        
-        setTimeout(() => {
-            setToken('123');
-            localStorage.setItem("site", '123');
+        try {
+        authLogin(data).then(res => {
+            localStorage.setItem(ACCESS_TOKEN, res.data.access);
+            localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+            setIsAuthorized(true);
+            dispatch(setProfile(data));
             navigate("/");
-        }, 300);
-
-        // try {
-        // authLogin({
-        //     method: "POST",
-        //     headers: { "Content-Type": "application/json" },
-        //     body: JSON.stringify(data),
-        // }).then(res => {
-        //     setUser(res.data.user);
-        //     setToken(res.token);
-        //     localStorage.setItem("site", res.token);
-        //     navigate("/");
-        //     return;
-        // }).catch(err => {
-        //     throw new Error(err.message);
-        // });
-        // } catch (err) {
-        // console.error(err);
-        // }
+            return;
+        }).catch(err => {
+            setIsAuthorized(false);
+            throw new Error(err.message);
+        });
+        } catch (err) {
+        console.error(err);
+        }
     };
 
-    const logOut = () => {
-        setUser(null);
-        setToken("");
-        localStorage.removeItem("site");
+    const registerAction = async ({ data }) => {
+        try {
+            postRegister(data);
+            return;
+        } catch (err) {
+            setIsAuthorized(false);
+            throw new Error(err.message);
+        }
+    };
+
+    const logoutAction = () => {
         dispatch(clearProfile());
-        navigate("/login");
+        navigate('/logout');
     };
+
+    useEffect(() => {
+        auth().catch(() => setIsAuthorized(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
-        <AuthContext.Provider value={{ token, user, loginAction, logOut }}>
+        <AuthContext.Provider value={{ isAuthorized, loginAction, registerAction, logoutAction }}>
         {children}
         </AuthContext.Provider>
     );

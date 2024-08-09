@@ -1,17 +1,21 @@
-import axios from "axios";
+import api from "./api";
 
 export async function getProfile() {
-    return axios.get('/api/profile/');
+    return api.get('/api/profiles/');
 }
 
-export async function postRegister() {
-    return axios.post('/api/register/');
+export async function postRegister(params) {
+    return api.post('/api/auth/register/', params);
 }
 
-export async function authLogin() {
-    return axios.post('/api/login/');
+export async function authLogin(params) {
+    return api.post('/api/auth/login/', params);
 }
 
 export async function authLogout() {
-    return axios.post('/api/logut/');
+    return api.post('/api/auth/logout/');
+}
+
+export async function tokenRefresh(params) {
+    return api.post('api/auth/token/refresh/', params);
 }

@@ -1,17 +1,17 @@
-import axios from "axios";
+import api from "./api";
 
 export async function getProducts() {
-    return axios.get('/api/products/');
+    return api.get('/api/products/');
 }
 
 export async function getProduct(id) {
-    return axios.get(`/api/products/${id}`);
+    return api.get(`/api/products/${id}`);
 }
 
 export async function selectProduct(params) {
-    return axios.post('/api/products/select', params);
+    return api.post('/api/products/select', params);
 }
 
-export async function deselectProduct(params) {
-    return axios.post('/api/products/deselect', params);
+export async function searchProducts(params) {
+    return api.get('/api/products/search', params);
 }
