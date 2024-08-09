@@ -28,6 +28,7 @@ SECRET_KEY = "django-insecure-8owt@6ou9hf-&)=a5pl$)5#lq%l(r7jn(t5r42yfv07h#qj=%a
 DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 # Application definition
@@ -44,9 +45,11 @@ INSTALLED_APPS = [
     "profiles",
     "rest_framework",
     "rest_framework_simplejwt",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
