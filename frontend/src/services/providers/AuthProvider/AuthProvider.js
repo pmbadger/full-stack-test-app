@@ -11,8 +11,12 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
     const [isAuthorized, setIsAuthorized] = useState(null);
     const dispatch = useDispatch();
-
     const navigate = useNavigate();
+
+    useEffect(() => {
+        auth().catch(() => setIsAuthorized(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const refreshToken = async () => {
         const refreshToken = localStorage.getItem(REFRESH_TOKEN);
@@ -82,11 +86,6 @@ const AuthProvider = ({ children }) => {
         dispatch(clearProfile());
         navigate('/logout');
     };
-
-    useEffect(() => {
-        auth().catch(() => setIsAuthorized(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     return (
         <AuthContext.Provider value={{ isAuthorized, loginAction, registerAction, logoutAction }}>

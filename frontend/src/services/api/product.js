@@ -12,6 +12,6 @@ export async function selectProduct(params) {
     return api.post('/api/products/select', params);
 }
 
-export async function searchProducts(params) {
-    return api.get('/api/products/search', params);
+export async function searchProducts(searchString) {
+    return api.get(`/api/products/search?q=${searchString}`);
 }

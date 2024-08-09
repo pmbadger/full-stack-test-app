@@ -9,7 +9,7 @@ const Navbar = ({ setItems, setIsLoading, setSortBy }) => {
     const profile = useSelector(state => state.profile); 
 
     const handleLogOut = useCallback(() => {
-        auth.logOut()
+        auth.logoutAction();
     }, [auth]);
 
     return (

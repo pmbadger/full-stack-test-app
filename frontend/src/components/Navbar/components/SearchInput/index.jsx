@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { searchProducts } from "../../../../services/api/product";
 
 const SearchInput = ({ setItems, setIsLoading }) => {
     const [value, setValue] = useState('');
@@ -8,13 +9,10 @@ const SearchInput = ({ setItems, setIsLoading }) => {
         setIsLoading(true);
         setValue(e.target.value);
         
-        setTimeout(() => {
-            setItems([]);
-            setIsLoading(false);
-        }, 1000);
-        // searchProducts({ value: e.target.value }).then(res => {
-        //     setItems(res.data);
-        // }).catch((err) => err) ;
+        searchProducts(e.target.value).then(res => {
+            setItems(res.data);
+        }).catch((err) => err)
+        .finally(() => setIsLoading(false));
     };
 
     return (
