@@ -7,13 +7,7 @@ const RegisterPage = () => {
 
     const handleSubmit = (result) => {
         if (result.password?.length > 0 && result.username?.length > 0 && result.email?.length > 0) {
-            auth.registerAction({
-                data: {
-                    password2: result.password,
-                    first_name: "string",
-                    last_name: "string",
-                    ...result,
-                }})
+            auth.registerAction({ data: result });
         };
     };
 

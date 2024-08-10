@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 import AuthProvider from "./services/providers/AuthProvider/AuthProvider";
@@ -27,9 +27,9 @@ function App() {
         <Provider store={store}>
           <AuthProvider>
             <Routes>
+              <Route path="/register" element={<RegisterAndLogout />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/logout" element={<Logout />} />
-              <Route path="/register" element={<RegisterAndLogout />} />
               <Route element={<PrivateRoute />}>
                 <Route path="/" element={<MainPage />} />
               </Route>

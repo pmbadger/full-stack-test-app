@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { selectProduct } from "../../../../services/api/product";
 
 const ProductTableRow = ({ item }) => {
-    const [isProductCheck, setIsProductCheck] = useState(item?.select || false);
+    const [isProductCheck, setIsProductCheck] = useState(item?.selected || false);
 
     const handleProductCheck = useCallback(e => {
         const isCheckedValue = e.target.checked;

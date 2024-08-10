@@ -1,7 +1,11 @@
 import api from "./api";
 
-export async function getProfile() {
-    return api.get('/api/profiles/');
+export async function getMyProfile(id) {
+    return api.get('/api/profiles/me');
+}
+
+export async function getProfile(id) {
+    return api.get(`/api/profiles/${id}`);
 }
 
 export async function postRegister(params) {

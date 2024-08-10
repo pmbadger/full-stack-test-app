@@ -1,6 +1,7 @@
 import React from "react";
 import EmptyTable from "./components/EmptyTable.jsx/index.jsx";
 import ProductTableRow from "./components/ProductTableRow/index.jsx";
+import LoadingPage from "../../pages/LoadingPage/index.jsx";
 
 const ProductTable = ({ items, isLoading }) => {
 
@@ -8,14 +9,9 @@ const ProductTable = ({ items, isLoading }) => {
         return <EmptyTable/>
     }
 
-    return (
+    return ( isLoading ? <LoadingPage /> :
         <div className="container h-100 d-flex flex-column mb-3">
-            {isLoading ?
-                <div className="spinner-border text-primary m-auto" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </div>
-                : items.map(item => <ProductTableRow key={item.id} item={item}/>)
-            }
+            {items.map(item => <ProductTableRow key={item.id} item={item}/>)}
         </div>
     );
 };

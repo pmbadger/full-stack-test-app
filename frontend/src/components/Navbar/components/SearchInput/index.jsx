@@ -8,11 +8,17 @@ const SearchInput = ({ setItems, setIsLoading }) => {
         e.preventDefault();
         setIsLoading(true);
         setValue(e.target.value);
-        
-        searchProducts(e.target.value).then(res => {
-            setItems(res.data);
-        }).catch((err) => err)
-        .finally(() => setIsLoading(false));
+
+        // We need to request items if search string is not empty
+        if (e.target.value === ''){
+            setItems([]);
+            setIsLoading(false);
+        } else {
+            searchProducts(e.target.value).then(res => {
+                setItems(res.data);
+            }).catch((err) => err)
+            .finally(() => setIsLoading(false));
+        }
     };
 
     return (

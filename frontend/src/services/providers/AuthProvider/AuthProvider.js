@@ -74,8 +74,11 @@ const AuthProvider = ({ children }) => {
 
     const registerAction = async ({ data }) => {
         try {
-            postRegister(data);
-            return;
+            postRegister(data).then(() => {
+                navigate("/login");
+            }).catch(err => {
+                setIsAuthorized(false);
+            });
         } catch (err) {
             setIsAuthorized(false);
             throw new Error(err.message);
