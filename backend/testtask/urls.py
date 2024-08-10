@@ -14,11 +14,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from asyncio import tasks
+
 from django.contrib import admin
 from django.urls import path, include
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from rest_framework.schemas import get_schema_view
+from profiles.views import ProfileDetailView
 
 
 urlpatterns = [
@@ -32,6 +35,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/auth/", include("profiles.urls")),
     path("api/products/", include("products.urls")),
+    path("api/profiles/<int:pk>", ProfileDetailView.as_view(), name="profile"),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),

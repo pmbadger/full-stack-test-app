@@ -4,7 +4,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .serializers import RegisterSerializer, LogoutSerializer
+from .serializers import RegisterSerializer, LogoutSerializer, ProfileSerializer
 
 
 class RegisterView(generics.CreateAPIView):
@@ -30,3 +30,8 @@ class LogoutView(generics.GenericAPIView):
 
 class TokenRefreshView(TokenRefreshView):
     permission_classes = (AllowAny,)
+
+
+class ProfileDetailView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = ProfileSerializer
