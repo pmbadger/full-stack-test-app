@@ -35,3 +35,15 @@ class TokenRefreshView(TokenRefreshView):
 class ProfileDetailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = ProfileSerializer
+
+
+class CurrentProfileDetailView(generics.GenericAPIView):
+    serializer_class = ProfileSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def get(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.get_serializer(obj)
+        return Response(serializer.data)
