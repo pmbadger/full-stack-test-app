@@ -1,13 +1,9 @@
-version: '3.8'
-
 services:
   web:
     container_name: web
-    build: ./backend
+    image: andrejch/testtask-backend:latest
     ports:
       - "8000:8000"
-    volumes:
-      - ./backend:/app:rw
     env_file:
       - .env
     depends_on:
